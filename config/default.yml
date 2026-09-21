@@ -1,0 +1,96 @@
+timezone: Asia/Shanghai
+
+report:
+  title: 加密、美股与大宗商品晨报
+
+http:
+  timeout_seconds: 15
+  retries: 3
+
+assets:
+  crypto:
+    - symbol: BTC
+      name: 比特币
+      coingecko_id: bitcoin
+      binance_symbol: BTCUSDT
+      unit: USD
+    - symbol: ETH
+      name: 以太坊
+      coingecko_id: ethereum
+      binance_symbol: ETHUSDT
+      unit: USD
+    - symbol: SOL
+      name: Solana
+      coingecko_id: solana
+      binance_symbol: SOLUSDT
+      unit: USD
+
+  equities:
+    - symbol: SPX
+      name: 标普500
+      yahoo_symbol: ^GSPC
+      stooq_symbol: ^spx
+      unit: 点
+    - symbol: IXIC
+      name: 纳斯达克综合指数
+      yahoo_symbol: ^IXIC
+      stooq_symbol: ^ndq
+      unit: 点
+    - symbol: DJI
+      name: 道琼斯工业指数
+      yahoo_symbol: ^DJI
+      stooq_symbol: ^dji
+      unit: 点
+    - symbol: VIX
+      name: VIX恐慌指数
+      yahoo_symbol: ^VIX
+      stooq_symbol: ^vix
+      unit: 点
+
+  commodities:
+    - symbol: GOLD
+      name: 黄金
+      yahoo_symbol: GC=F
+      stooq_symbol: xauusd
+      unit: USD/oz
+    - symbol: SILVER
+      name: 白银
+      yahoo_symbol: SI=F
+      stooq_symbol: xagusd
+      unit: USD/oz
+    - symbol: WTI
+      name: WTI原油
+      yahoo_symbol: CL=F
+      stooq_symbol: cl.f
+      unit: USD/桶
+    - symbol: BRENT
+      name: 布伦特原油
+      yahoo_symbol: BZ=F
+      stooq_symbol: bz.f
+      unit: USD/桶
+    - symbol: COPPER
+      name: 铜
+      yahoo_symbol: HG=F
+      stooq_symbol: hg.f
+      unit: USD/磅
+
+news:
+  max_items: 12
+  feeds:
+    - name: CoinDesk
+      url: https://www.coindesk.com/arc/outboundfeeds/rss/
+    - name: CNBC Markets
+      url: https://www.cnbc.com/id/10000664/device/rss/rss.html
+    - name: MarketWatch
+      url: https://feeds.content.dowjones.io/public/rss/mw_topstories
+
+ai:
+  providers:
+    - name: DeepSeek
+      api_key_env: DEEPSEEK_API_KEY
+      base_url: https://api.deepseek.com
+      model: deepseek-chat
+    - name: OpenAI
+      api_key_env: OPENAI_API_KEY
+      base_url: https://api.openai.com/v1
+      model: gpt-5-mini

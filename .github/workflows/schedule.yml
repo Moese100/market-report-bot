@@ -1,24 +1,62 @@
-name: 每日晨报
+name: 生成并发送每日晨报
 
 on:
   schedule:
-    # 北京时间 7:30 -> UTC 23:30
+    # UTC 23:30 = 北京时间次日 07:30。GitHub 的 schedule 可能排队延迟。
     - cron: "30 23 * * *"
   workflow_dispatch:
+    inputs:
+      mode:
+        description: 报告模式
+        required: true
+        default: auto
+        type: choice
+        options:
+          - auto
+          - full
+          - crypto
+      dry_run:
+        description: 只生成报告，不发送飞书
+        required: true
+        default: false
+        type: boolean
+
+permissions:
+  contents: read
+
+concurrency:
+  group: market-report-production
+  cancel-in-progress: false
 
 jobs:
-  build:
+  report:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-python@v4
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
         with:
-          python-version: "3.10"
+          python-version: "3.12"
+          cache: pip
       - name: 安装依赖
-        run: pip install requests
+        run: python -m pip install --requirement requirements.txt
       - name: 生成并发送
         env:
-          BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
-          CHAT_ID: ${{ secrets.CHAT_ID }}
           DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
-        run: python main.py
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          FEISHU_WEBHOOK_URL: ${{ secrets.FEISHU_WEBHOOK_URL }}
+          REPORT_MODE: ${{ inputs.mode || 'auto' }}
+          DRY_RUN: ${{ inputs.dry_run || 'false' }}
+        shell: bash
+        run: |
+          args=(--mode "$REPORT_MODE" --output report.md)
+          if [[ "$DRY_RUN" == "true" ]]; then args+=(--dry-run); fi
+          python -m market_report "${args[@]}"
+      - name: 保存报告供排障
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: market-report-${{ github.run_number }}
+          path: report.md
+          if-no-files-found: ignore
+          retention-days: 7

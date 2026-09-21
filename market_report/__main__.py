@@ -1,5 +1,3 @@
-"""Backward-compatible entry point. Prefer ``python -m market_report``."""
-
 from market_report.cli import main
 
 if __name__ == "__main__":
