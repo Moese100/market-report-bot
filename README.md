@@ -140,7 +140,7 @@ Webhook 应类似：
 https://open.feishu.cn/open-apis/bot/v2/hook/……
 ```
 
-如果为机器人启用了“关键词”安全设置，请确保允许晨报标题中的关键词；也可以使用飞书提供的签名校验方案扩展 `FeishuSender`。
+如果为机器人启用了“关键词”安全设置，请确保允许晨报标题中的关键词；本项目已内置签名校验支持：设置环境变量 `FEISHU_SECRET` 即可（推荐）。
 
 ## 五、配置 GitHub Secrets
 
@@ -149,6 +149,7 @@ https://open.feishu.cn/open-apis/bot/v2/hook/……
 | Secret | 必需 | 用途 |
 |---|---:|---|
 | `FEISHU_WEBHOOK_URL` | 是 | 飞书自定义机器人地址 |
+| `FEISHU_SECRET` | 建议 | 机器人开启“签名校验”时的密钥 |
 | `DEEPSEEK_API_KEY` | 建议 | 主 AI 模型 |
 | `OPENAI_API_KEY` | 建议 | DeepSeek 失败时自动兜底 |
 

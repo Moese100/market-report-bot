@@ -45,6 +45,7 @@ jobs:
           DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           FEISHU_WEBHOOK_URL: ${{ secrets.FEISHU_WEBHOOK_URL }}
+          FEISHU_SECRET: ${{ secrets.FEISHU_SECRET }}
           REPORT_MODE: ${{ inputs.mode || 'auto' }}
           DRY_RUN: ${{ inputs.dry_run || 'false' }}
         shell: bash

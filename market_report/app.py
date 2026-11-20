@@ -77,5 +77,5 @@ def deliver_report(settings: Settings, report: str) -> None:
     if not webhook:
         raise RuntimeError("未配置 FEISHU_WEBHOOK_URL；请使用 --dry-run 预览或添加 GitHub Secret")
     http = HttpClient(timeout=settings.timeout, retries=settings.retries)
-    FeishuSender(http, webhook).send(settings.report_title, report)
+    FeishuSender(http, webhook, secret=env("FEISHU_SECRET")).send(settings.report_title, report)
     LOGGER.info("report_sent channel=feishu")
